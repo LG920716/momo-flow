@@ -1,23 +1,21 @@
 import requests
 from PIL import Image
+from promptflow.contracts.multimedia import Image as PFImage
+import io
 from io import BytesIO
 from promptflow.core import tool
 
 @tool
-def load_image_from_url(url: str):
-    result = {
-        "image": None,
-        "has_image": False,
-    }
-
+def load_image_from_url(url: str) -> PFImage:
     try:
         response = requests.get(url, timeout=10)
-        response.raise_for_status()  # 如果不是 200，會丟出例外
+        response.raise_for_status()
         image = Image.open(BytesIO(response.content))
-        image.load()  # 確保整張圖片都載入進來
-        result["image"] = image
-        result["has_image"] = True
+        
+        byte_arr = io.BytesIO()
+        image.save(byte_arr, format="JPEG")
+        
+        return PFImage(byte_arr.getvalue(), mime_type="image/jpeg")
+    
     except Exception as e:
-        print(f"載入圖片失敗：{e}")
-
-    return result
+        raise RuntimeError(f"圖片載入失敗: {e}")

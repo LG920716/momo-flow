@@ -57,11 +57,6 @@
           "type": [
             "image"
           ]
-        },
-        "context": {
-          "type": [
-            "string"
-          ]
         }
       },
       "source": "image.jinja2"

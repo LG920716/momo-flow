@@ -4,6 +4,3 @@ promptflow-core
 promptflow-devkit
 promptflow-azure
 promptflow-tracing
-pandas
-requests
-scikit-learn
